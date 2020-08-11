@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document Category</title>
+
+    <!-- Style Sheets -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+      crossorigin="anonymous"
+    />
+
+    <!-- jQuery Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#loader").hide();
+        $("#resultTable").hide();
+        // observe the value change of the dropdown and respond accordingly
+        $("#documentCategory").change(function () {
+          //Start the loader
+          $("#loader").show();
+
+          var category = $("#documentCategory").val();
+          //   Make AJAX call
+          $.ajax({
+            url: "backend.php",
+            type: "POST",
+            data: { action: "read", category_id: category },
+            success: function (response) {
+              var data = JSON.parse(response);
+              var tableBody = "";
+              for (var i = 0; i < data.length; i++) {
+                tableBody += "<tr>";
+                tableBody += '<th scope="row">' + (i + 1) + "</th>";
+                tableBody += "<td>" + data[i].document_name + "</td>";
+                tableBody += "</tr>";
+              }
+
+              $("#loader").hide();
+              $("#resultTable").show();
+              $("#results").html(tableBody);
+            },
+            error: function (error) {
+              alert(error);
+            },
+          });
+        });
+      });
+    </script>
+
+    <!-- custom styles -->
+    <style>
+      .primary-color {
+        color: #004a8b;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-light shadow-sm">
+      <div class="container-fluid">
+        <div class="navbar-brand mx-auto" href="#">
+          Richmond Assets and Holdings
+        </div>
+      </div>
+    </nav>
+    <div class="container my-3">
+      <h1 class="primary-color">Technical Test - Phase 2</h1>
+    </div>
+    <!-- Form containing Dropdown -->
+    <div class="my-3 bg-light">
+      <form class="container py-3">
+        <div class="form-group">
+          <label class="font-weight-bold">Select Category</label>
+          <select class="form-control form-control-lg" id="documentCategory">
+            <option selected disabled value="">Select From ...</option>
+            <option value="1">Personal Documents</option>
+            <option value="2">Canadian Entity Documents</option>
+            <option value="3">Current Entity Documents</option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <!-- Loader -->
+    <div class="text-center" id="loader">
+      <div
+        class="spinner-grow text-secondary"
+        style="width: 3rem; height: 3rem;"
+        role="status"
+      >
+        <span class="sr-only">Loading...</span>
+      </div>
+      <h3 class="text-info">Fetching Results</h3>
+    </div>
+
+    <!-- Result Table -->
+    <div id="resultTable">
+      <table class="table table-striped container">
+        <thead>
+          <tr>
+            <th scope="col">Sr. No</th>
+            <th scope="col">Document Name</th>
+          </tr>
+        </thead>
+        <tbody id="results"></tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,10 @@
+Array
+(
+    [date] => August 11, 2020, 6:07 pm
+    [sql] => SELECT document_name FROM lu_documents WHERE doc_catId=1
+    [mysqlerror] => SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sample.lu_document' doesn't exist
+    [fileName] => H:\Technical Test\richmond-ah\model.php
+    [lineNumber] => 7
+    [remoteHost] => Ronak_PC
+    [clientAddress] => ::1
+)
